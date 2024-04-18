@@ -1,22 +1,30 @@
-# E-commerce Back End Starter Code
+# E-commerce Back End Application
 
 ## Description
-This is supposed to be a backend application for an e commerce site. The MySQL database allows the ability to store, create and delete products, categories and tags. 
+This application powers the backend of an online store. It uses a mySQL database to store information about products, categories, and tags. The database allows us to add, remove, and manage these items. We have a video demonstrating how we interact with the database using Insomnia, a tool for testing APIs, and how the routes in our application handle requests. You'll find the video included in our submission.
 
 ## Table of Contents
-[-] Installation 
+[-] Installation
+[-] Video Tutorial
 [-] License
-[-] Future
+[-] Questions
 
-## Installation
-[-] Run npm i in the terminal
-[-] Log into your mysql
-[-] Enter "CREATE DATABASE ecommerce_db;" into you MySQL
-[-] Quit out of MySQL by typing "exit" and hitting enter.
-[-] Then, type "npm run seed" to seed the database with data.
-[-] After that is finished, type "npm start" to start up the server.
+### Installation
+[Run] >npm install to ensure all required packages are available. 
+[Run] >node server.js to start the application. 
+Use Insomnia to test the routes. This including get, post, put, and delete requests.
+The server.js file initializes and seeds the database, then starts the server on port 3001.
 
-## License
+### Video Tutorial
+Video tutorial can be found in the "assets" folder. The video tutorial only shows the category routes. The other routes have the same functionality but I felt it redundant to show those as well.
 
-## Future
-I am 99% complete on this project. I have been getting an error indicating "Access denied for user ''@'localhost' (using password: YES)" that is preventing me from development. I am on a time crunch but I would like to resolve this issue in the future to get it fully functional. 
+### License
+MIT License
+
+
+### Questions
+Contact me with any questions at:
+
+GitHub: https://github.com/a-a-ronc
+LinkedIn: https://www.linkedin.com/in/aaron-cendejas-577b67223/ 
+Email:accenaar0@gmail.com
