@@ -1,50 +1,87 @@
-// import important parts of sequelize library
-const { Model, DataTypes } = require('sequelize');
-// import our database connection from config.js
-const sequelize = require('../config/connection');
+const express = require('express');
+const router = express.Router();
+const { Product } = require('../../models');
 
-// Initialize Product model (table) by extending off Sequelize's Model class
-class Product extends Model {}
-
-// set up fields and rules for Product model
-Product.init(
-  {
-    id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      primaryKey: true,
-      autoIncrement: true
-    },
-    product_name: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    price: {
-    type: DataTypes.DECIMAL,
-      allowNull: false,
-      validate: {isDecimal: true}
-    },
-    stock: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      defaultValue: 10,
-      validate: {isNumeric: true}
-    },
-    category_id: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: "category",
-        key: 'id'
-      }
-    }
-  },
-  {
-    sequelize,
-    timestamps: false,
-    freezeTableName: true,
-    underscored: true,
-    modelName: 'product',
+// GET all products
+router.get('/', async (req, res) => {
+  try {
+    const productData = await Product.findAll();
+    res.status(200).json(productData);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Error retrieving products' });
   }
-);
+});
 
-module.exports = Product;
+// Get Single product by ID
+router.get('/:id', async (req, res) => {
+  try {
+    const productData = await Product.findByPk(req.params.id);
+    if (!productData) {
+      res.status(404).json({ message: 'No product found with that id!' });
+      return;
+    }
+    res.status(200).json(productData);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Error retrieving product with id=' + req.params.id });
+  }
+});
+
+// POST a new product
+router.post('/', async (req, res) => {
+  try {
+    const newProduct = await Product.create({
+      product_name: req.body.product_name,
+      price: req.body.price,
+      stock: req.body.stock,
+      category_id: req.body.category_id,
+    });
+    res.status(201).json(newProduct);
+  } catch (err) {
+    console.error(err);
+    res.status(400).json(err);
+  }
+});
+
+// PUT to update a product by its ID
+router.put('/:id', async (req, res) => {
+  try {
+    const updatedProduct = await Product.update(req.body, {
+      where: { id: req.params.id },
+    });
+
+    if (updatedProduct[0] > 0) {
+      res.status(200).json({ message: 'Product updated successfully' });
+    } else {
+      res.status(404).json({ message: 'Product not found' });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json(err);
+  }
+});
+
+// DELETE a product by its ID
+router.delete('/:id', async (req, res) => {
+  try {
+    const numDeleted = await Product.destroy({
+      where: { id: req.params.id },
+    });
+
+    if (numDeleted > 0) {
+      res.status(200).json({ message: 'Product was deleted successfully!' });
+    } else {
+      res.status(404).json({ message: `Cannot delete Product with id=${req.params.id}. Maybe Product was not found!` });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Could not delete Product with id=' + req.params.id });
+  }
+});
+
+// Export the router
+module.exports = router;
+
+
+
